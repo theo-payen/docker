@@ -1,8 +1,13 @@
-FROM haproxy
+FROM debian:11
 USER root
-COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+RUN apt update -y\
+    && apt update -y
+RUN apt install haproxy -y
+#COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
 
-RUN apt -y update \
-    && apt-get upgrade -y \
-    && apt install keepalived -y
+RUN ls /etc/haproxy/
+CMD [ "ping 8.8.8.8" ]
+#RUN apt -y update \
+#    && apt-get upgrade -y \
+#    && apt install keepalived -y
 # CMD [ "cat /etc/keepalived/keepalived.conf" ]
