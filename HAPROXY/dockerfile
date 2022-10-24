@@ -1,12 +1,9 @@
-FROM debian:11
+FROM haproxytech/haproxy-alpine
 USER root
-RUN apt update -y\
-    && apt update -y
-RUN apt install haproxy -y
-#COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
 
-RUN ls /etc/haproxy/
-CMD [ "ping 8.8.8.8" ]
+#RUN ls /etc/haproxy/
+#CMD [ "ping 8.8.8.8" ]
 #RUN apt -y update \
 #    && apt-get upgrade -y \
 #    && apt install keepalived -y
