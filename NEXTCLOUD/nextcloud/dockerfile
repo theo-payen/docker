@@ -1,0 +1,53 @@
+FROM ubuntu:22.04
+
+ARG DBTYPE
+ARG DBNAME
+ARG DBUSER
+ARG DBPASS
+ARG DBHOST
+ARG ADMINLOGIN
+ARG ADMINPASS
+
+ENV DEBIAN_FRONTEND=noninteractive
+EXPOSE 80
+WORKDIR /tmp
+
+RUN apt update \
+    && apt upgrade -y \
+    && apt install -y wget \
+        php8.1 \
+        libapache2-mod-php8.1 \
+        php8.1-gd \
+        php8.1-mysql \
+        php8.1-curl \
+        php8.1-mbstring \
+        php8.1-intl \
+        php8.1-gmp \
+        php8.1-bcmath \
+        php8.1-xml \
+        php8.1-imagick \
+        php8.1-zip \
+        apache2
+
+COPY --chown=www-data:www-data nextcloud/ /var/www/nextcloud/
+
+ADD nextcloud.conf /etc/apache2/sites-available/nextcloud.conf
+
+
+RUN echo "<?php \$AUTOCONFIG = array(); \$AUTOCONFIG['dbtype'] = '$DBTYPE'; \$AUTOCONFIG['dbname'] = '$DBNAME'; \$AUTOCONFIG['dbuser'] = '$DBUSER'; \$AUTOCONFIG['dbpass'] = '$DBPASS'; \$AUTOCONFIG['dbhost'] = '$DBHOST'; \$AUTOCONFIG['dbtableprefix'] = ''; \$AUTOCONFIG['adminlogin'] = '$ADMINLOGIN' ; \$AUTOCONFIG['adminpass'] = '$ADMINPASS'; ?>" > /var/www/nextcloud/config/autoconfig.php
+
+RUN echo "$DBTYPE $DBNAME">> test
+RUN a2enmod rewrite \
+    && a2dissite 000-default.conf \
+    && a2ensite nextcloud.conf \
+    && a2enmod headers \
+    && a2enmod env \
+    && a2enmod dir \
+    && a2enmod mime
+
+RUN apt-get autoremove wget -y \
+    && apt-get purge -y --autoremove \
+    && apt autoclean -y \
+    && apt-get clean -y
+
+CMD ["apachectl","-D","FOREGROUND"]
