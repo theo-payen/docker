@@ -1,0 +1,31 @@
+FROM debian:11
+
+RUN apt update \
+    && apt full-upgrade -y \
+    && apt install -y curl \
+        apache2 \
+        mariadb-client \
+        php \
+        libapache2-mod-php \
+        php-cli \
+        php-mysql \
+        php-zip \
+        php-curl \
+        php-xml \
+        php-gd \
+        php-intl \
+        php-mbstring \
+        php-imagick
+
+WORKDIR /var/www/html
+RUN curl -O https://wordpress.org/latest.tar.gz \
+    && tar -xvf latest.tar.gz \
+    && rm latest.tar.gz
+
+COPY wp-config.php wordpress/wp-config.php
+
+RUN chown -R www-data:www-data /var/www/html/wordpress
+
+RUN rm /var/www/html/wordpress/readme.html
+
+CMD ["apachectl","-D","FOREGROUND"]
