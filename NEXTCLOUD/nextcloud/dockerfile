@@ -1,10 +1,16 @@
 FROM ubuntu:22.04
 
-ARG DBTYPE DBNAME DBUSER DBPASS DBHOST ADMINLOGIN ADMINPASS
-
 ENV DEBIAN_FRONTEND=noninteractive
-EXPOSE 80
-WORKDIR /tmp
+
+ARG DBTYPE \
+    DBNAME \
+    DBUSER \
+    DBPASS \
+    DBHOST \
+    ADMINLOGIN \
+    ADMINPASS
+
+#WORKDIR /tmp
 
 RUN apt update \
     && apt upgrade -y \
@@ -23,7 +29,7 @@ RUN apt update \
         php8.1-zip \
         apache2
 
-COPY --chown=www-data:www-data nextcloud/ /var/www/nextcloud/
+ADD --chown=www-data:www-data nextcloud.tar.bz2 /var/www/nextcloud/
 
 ADD nextcloud.conf /etc/apache2/sites-available/nextcloud.conf
 
@@ -45,4 +51,5 @@ RUN apt-get autoremove wget -y \
     && apt autoclean -y \
     && apt-get clean -y
 
+EXPOSE 80
 CMD ["apachectl","-D","FOREGROUND"]

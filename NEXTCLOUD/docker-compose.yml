@@ -1,6 +1,5 @@
 version: '3.8'
 
-
 services:
   nexcloud:
     build: 
@@ -13,6 +12,8 @@ services:
         DBHOST: db
         ADMINLOGIN: nextcloud
         ADMINPASS: nextcloud
+    volumes:
+      - db_data:/var/lib/mysql
 
     ports:
       - "8080:80"
@@ -29,3 +30,6 @@ services:
       MYSQL_DATABASE: nextcloud
       MYSQL_USER: nextcloud
       MYSQL_PASSWORD: nextcloud
+
+volumes:
+  db_data:
