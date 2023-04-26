@@ -34,27 +34,9 @@ COPY --chown=www-data:www-data nextcloud/ /var/www/nextcloud/
 ADD nextcloud.conf /etc/apache2/sites-available/nextcloud.conf
 
 
-#RUN echo "<?php \$AUTOCONFIG = array(); \$AUTOCONFIG['dbtype'] = '$DBTYPE'; \$AUTOCONFIG['dbname'] = '$DBNAME'; \$AUTOCONFIG['dbuser'] = '$DBUSER'; \$AUTOCONFIG['dbpass'] = '$DBPASS'; \$AUTOCONFIG['dbhost'] = '$DBHOST'; \$AUTOCONFIG['dbtableprefix'] = ''; \$AUTOCONFIG['adminlogin'] = '$ADMINLOGIN' ; \$AUTOCONFIG['adminpass'] = '$ADMINPASS'; ?>" > /var/www/nextcloud/config/autoconfig.php
+RUN echo "<?php \$AUTOCONFIG = array(); \$AUTOCONFIG['dbtype'] = '$DBTYPE'; \$AUTOCONFIG['dbname'] = '$DBNAME'; \$AUTOCONFIG['dbuser'] = '$DBUSER'; \$AUTOCONFIG['dbpass'] = '$DBPASS'; \$AUTOCONFIG['dbhost'] = '$DBHOST'; \$AUTOCONFIG['dbtableprefix'] = ''; \$AUTOCONFIG['adminlogin'] = '$ADMINLOGIN' ; \$AUTOCONFIG['adminpass'] = '$ADMINPASS'; ?>" > /var/www/nextcloud/config/autoconfig.php
 
-# cat > $FILE <<- EOM
-# Line 1.
-# Line 2.
-# EOM
-
-# RUN echo -e '\
-# line 1\n\
-# line 2\n\
-# line 3\
-# ' > /tmp/example.txt
-
-
-# RUN cat <<EOF >> /home/docker/.bashrc
-# export WORKON_HOME=\$HOME/.virtualenvs
-# export PROJECT_HOME=\$HOME/Devel
-# source /usr/local/bin/virtualenvwrapper.sh
-# EOF
-
-RUN echo "<?php $AUTOCONFIG = array('dbtype' => '$DBTYPE', 'dbname' => '$DBNAME', 'dbuser' => '$DBUSER', 'dbpass' => '$DBPASS', 'dbhost' => '$DBHOST', 'dbtableprefix' => '', 'adminlogin' => '$ADMINLOGIN', 'adminpass' => '$ADMINPASS', 'directory' => '/www/htdocs/nextcloud/data', );?>" > /var/www/nextcloud/config/autoconfig.php
+# RUN echo "<?php $AUTOCONFIG = array('dbtype' => '$DBTYPE', 'dbname' => '$DBNAME', 'dbuser' => '$DBUSER', 'dbpass' => '$DBPASS', 'dbhost' => '$DBHOST', 'dbtableprefix' => '', 'adminlogin' => '$ADMINLOGIN', 'adminpass' => '$ADMINPASS', 'directory' => '/www/htdocs/nextcloud/data', );?>" > /var/www/nextcloud/config/autoconfig.php
 
 RUN a2enmod rewrite \
     && a2dissite 000-default.conf \
