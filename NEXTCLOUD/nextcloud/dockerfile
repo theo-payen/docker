@@ -54,21 +54,7 @@ ADD nextcloud.conf /etc/apache2/sites-available/nextcloud.conf
 # source /usr/local/bin/virtualenvwrapper.sh
 # EOF
 
-RUN cat > /var/www/nextcloud/config/autoconfig.php <<EOT
-<?php
-    $AUTOCONFIG = array(
-    'dbtype' => '$DBTYPE',
-    'dbname' => '$DBNAME',
-    'dbuser' => '$DBUSER',
-    'dbpass' => '$DBPASS',
-    'dbhost' => '$DBHOST',
-    'dbtableprefix' => '',
-    'adminlogin' => '$ADMINLOGIN',
-    'adminpass' => '$ADMINPASS',
-    'directory' => '/www/htdocs/nextcloud/data',
-    );
-?>
-EOT
+RUN echo "<?php $AUTOCONFIG = array('dbtype' => '$DBTYPE', 'dbname' => '$DBNAME', 'dbuser' => '$DBUSER', 'dbpass' => '$DBPASS', 'dbhost' => '$DBHOST', 'dbtableprefix' => '', 'adminlogin' => '$ADMINLOGIN', 'adminpass' => '$ADMINPASS', 'directory' => '/www/htdocs/nextcloud/data', );?>" > /var/www/nextcloud/config/autoconfig.php
 
 RUN a2enmod rewrite \
     && a2dissite 000-default.conf \
