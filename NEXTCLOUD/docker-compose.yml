@@ -13,7 +13,7 @@ services:
         ADMINLOGIN: nextcloud
         ADMINPASS: nextcloud
     ports:
-      - "8080:80"
+      - 8080:80
     depends_on:
       - db
 
@@ -21,7 +21,7 @@ services:
     image: mysql:oracle
     restart: always
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: nextcloud
       MYSQL_DATABASE: nextcloud
@@ -34,3 +34,4 @@ services:
 
 volumes:
   db_data:
+
